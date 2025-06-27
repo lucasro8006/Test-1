@@ -1,96 +1,131 @@
-# Trading Agent with Reinforcement Learning
+# Sistema de Trading com Reinforcement Learning
 
-This project implements a complete pipeline for training and evaluating a trading agent using Reinforcement Learning (RL) with stable-baselines3 and a custom Gymnasium environment.
+Este projeto implementa um sistema completo de trading baseado em Reinforcement Learning (RL), utilizando a biblioteca stable-baselines3 e um ambiente customizado baseado em Gymnasium.
 
-## Overview
+## Visão Geral
 
-The trading agent uses Proximal Policy Optimization (PPO) to learn optimal trading strategies based on technical indicators. The system includes:
+O agente de trading utiliza Proximal Policy Optimization (PPO) para aprender estratégias ótimas de negociação baseadas em indicadores técnicos. O sistema inclui:
 
-- Feature engineering for technical indicators
-- Custom Gymnasium environment for trading simulation
-- Hyperparameter optimization with Optuna
-- Purged time-series cross-validation
-- Feature importance analysis with SHAP
-- Comprehensive performance evaluation
+- Engenharia de features para indicadores técnicos
+- Ambiente customizado Gymnasium para simulação de trading
+- Otimização de hiperparâmetros com Optuna
+- Validação cruzada encadeada com purga para séries temporais
+- Análise de importância de features com SHAP
+- Avaliação abrangente de desempenho
 
-## Project Structure
+## Estrutura do Projeto
 
-- `trading_agent.py`: Main script containing the complete pipeline
-- `robo.py`: Original prototype script (kept for reference)
-
-## Key Components
-
-### FeatureEngineer
-
-Responsible for calculating and normalizing technical indicators:
-- MACD (Moving Average Convergence Divergence)
-- RSI (Relative Strength Index)
-- Bollinger Bands
-
-### TradingEnv
-
-Custom Gymnasium environment that simulates trading with:
-- Realistic transaction costs (commission and slippage)
-- Multiple reward functions (PnL, Sharpe Ratio, Calmar Ratio)
-- Detailed trade history tracking
-
-### TradingAgent
-
-Wrapper for the PPO model that handles:
-- Training on historical data
-- Making predictions for new observations
-- Saving and loading trained models
-
-### PurgedTimeSeriesSplit
-
-Time-series cross-validation with:
-- Purging to remove training samples that overlap with test data
-- Embargo to prevent data leakage
-
-## Usage
-
-To run the complete pipeline:
-
-```bash
-python trading_agent.py
+```
+.
+├── src/                      # Código-fonte principal
+│   ├── data/                 # Módulos para carregamento e preparação de dados
+│   ├── environments/         # Ambientes de trading para RL
+│   ├── features/             # Engenharia de features
+│   ├── models/               # Modelos de agentes de trading
+│   ├── evaluation/           # Avaliação de desempenho
+│   └── utils/                # Utilitários diversos
+├── models/                   # Modelos treinados
+├── results/                  # Resultados e gráficos
+├── main.py                   # Script principal
+├── quick_test_fixed.py       # Script para teste rápido
+├── trading_agent.py          # Versão anterior do script principal
+└── requirements.txt          # Dependências
 ```
 
-This will:
-1. Download historical data for PETR4.SA
-2. Split data into train, validation, and test sets
-3. Optimize hyperparameters using Optuna
-4. Train the final model with the best parameters
-5. Evaluate performance on unseen test data
-6. Analyze feature importance with SHAP
+## Componentes Principais
 
-## Requirements
+### 1. Engenharia de Features (`FeatureEngineer`)
 
-- pandas
-- numpy
-- yfinance
-- gymnasium
-- stable-baselines3
-- matplotlib
-- optuna
-- shap
+Classe responsável por transformar dados brutos de preços em features técnicas para o modelo:
+- Indicadores técnicos (MACD, RSI, Bollinger Bands, etc.)
+- Normalização de features
+- Preparação de dados para o ambiente de trading
 
-Install dependencies:
+### 2. Ambiente de Trading (`TradingEnv`)
+
+Ambiente customizado baseado em Gymnasium que simula um mercado de trading:
+- Suporte a diferentes tipos de recompensa (PnL, Sharpe, Calmar)
+- Simulação realista com custos de transação (comissão e slippage)
+- Rastreamento de histórico de operações e métricas
+
+### 3. Agente de Trading (`TradingAgent`)
+
+Wrapper para o modelo PPO da stable-baselines3:
+- Métodos para treinamento, previsão e persistência
+- Integração com callbacks para monitoramento
+- Compatibilidade com diferentes políticas e arquiteturas de rede
+
+### 4. Validação Cruzada Encadeada (`PurgedTimeSeriesSplit`)
+
+Validação cruzada especializada para séries temporais financeiras:
+- Purga para remover amostras de treino que se sobrepõem aos dados de teste
+- Embargo para prevenir vazamento de dados
+
+## Como Usar
+
+### Instalação
 
 ```bash
-pip install pandas numpy yfinance gymnasium "stable-baselines3[extra]" matplotlib optuna shap
+pip install -r requirements.txt
 ```
 
-## Performance Metrics
+### Execução Básica
 
-The agent is evaluated using:
-- Total Return
-- Sharpe Ratio (risk-adjusted return)
-- Maximum Drawdown
-- Calmar Ratio (return relative to maximum drawdown)
+```bash
+python main.py --ticker PETR4.SA --start_date 2018-01-01 --end_date 2023-12-31
+```
 
-## Future Improvements
+### Otimização de Hiperparâmetros
 
-- Implement multi-asset portfolio optimization
-- Add more sophisticated features (sentiment analysis, macroeconomic indicators)
-- Explore different RL algorithms (SAC, TD3)
-- Implement online learning for continuous model updates
+```bash
+python main.py --ticker PETR4.SA --optimize --n_trials 50
+```
+
+### Teste Rápido
+
+```bash
+python quick_test_fixed.py
+```
+
+## Métricas de Desempenho
+
+O agente é avaliado usando:
+- Retorno Total
+- Sharpe Ratio (retorno ajustado ao risco)
+- Drawdown Máximo
+- Calmar Ratio (retorno relativo ao drawdown máximo)
+- Taxa de Acerto (win rate)
+- Fator de Lucro (profit factor)
+
+## Recursos Avançados
+
+### 1. Validação Cruzada Encadeada
+
+Implementação de validação cruzada com purga e embargo para evitar vazamento de dados em séries temporais financeiras.
+
+### 2. Análise de Importância de Features
+
+Utilização de SHAP (SHapley Additive exPlanations) para entender quais features são mais importantes para as decisões do agente.
+
+### 3. Diferentes Tipos de Recompensa
+
+Suporte a diferentes funções de recompensa:
+- PnL simples
+- Sharpe Ratio diferencial
+- Calmar Ratio diferencial
+
+### 4. Custos de Transação Realistas
+
+Simulação de custos de transação:
+- Comissão percentual
+- Slippage baseado em spread
+
+## Próximos Passos
+
+- [ ] Suporte a múltiplos ativos (portfolio)
+- [ ] Integração com dados fundamentais
+- [ ] Análise de sentimento de mercado
+- [ ] Backtesting mais robusto com dados de tick
+- [ ] Interface web para visualização de resultados
+- [ ] Implementação de outros algoritmos de RL (SAC, TD3, etc.)
+- [ ] Suporte a operações de venda a descoberto (short)

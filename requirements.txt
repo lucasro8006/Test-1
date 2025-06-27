@@ -4,6 +4,10 @@ yfinance>=0.1.70
 gymnasium>=0.26.0
 stable-baselines3[extra]>=2.0.0
 matplotlib>=3.4.0
+seaborn>=0.11.0
 optuna>=2.10.0
-shap>=0.40.0
+shap>=0.40.0; python_version >= '3.8'  # Opcional para análise de features
 scikit-learn>=1.0.0
+ta>=0.10.0
+tqdm>=4.60.0
+pyarrow>=7.0.0  # Para suporte a parquet
