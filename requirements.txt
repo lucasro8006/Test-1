@@ -8,6 +8,15 @@ seaborn>=0.11.0
 optuna>=2.10.0
 shap>=0.40.0; python_version >= '3.8'  # Opcional para análise de features
 scikit-learn>=1.0.0
-ta>=0.10.0
+ta-lib; platform_system != "Windows"  # TA-Lib (instalar manualmente no Windows)
+ta>=0.10.0  # Fallback para TA-Lib
 tqdm>=4.60.0
 pyarrow>=7.0.0  # Para suporte a parquet
+tensorboard>=2.8.0  # Para visualização de treinamento
+joblib>=1.1.0  # Para paralelização
+pytest>=6.0.0  # Para testes
+pytest-cov>=2.12.0  # Para cobertura de testes
+ipywidgets>=7.6.0  # Para widgets em notebooks
+plotly>=5.3.0  # Para visualizações interativas
+statsmodels>=0.13.0  # Para análises estatísticas
+scipy>=1.7.0  # Para cálculos científicos

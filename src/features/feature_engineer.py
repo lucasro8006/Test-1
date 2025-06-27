@@ -23,10 +23,50 @@ class FeatureEngineer:
     para uso em modelos de aprendizado de máquina.
     """
     
-    def __init__(self):
-        """Inicializa o engenheiro de features."""
+    def __init__(self, use_ta_lib=True, selected_features=None, normalize=True):
+        """
+        Inicializa o engenheiro de features.
+        
+        Args:
+            use_ta_lib (bool): Se True, tenta usar TA-Lib para cálculos mais rápidos
+            selected_features (list): Lista de features a serem calculadas. Se None, calcula todas
+            normalize (bool): Se True, normaliza as features
+        """
         self.scaler = StandardScaler()
         self.feature_columns = []
+        self.use_ta_lib = use_ta_lib and TALIB_AVAILABLE
+        self.normalize = normalize
+        
+        # Features disponíveis
+        self.available_features = {
+            'sma': ['sma_5', 'sma_20', 'sma_50', 'sma_200'],
+            'ema': ['ema_5', 'ema_12', 'ema_26'],
+            'macd': ['macd', 'macdsignal', 'macdhist'],
+            'rsi': ['rsi'],
+            'bollinger': ['bbhigh', 'bbmid', 'bblow', 'bbpct'],
+            'atr': ['atr', 'atr_pct'],
+            'adx': ['adx'],
+            'stochastic': ['stoch_k', 'stoch_d'],
+            'obv': ['obv'],
+            'momentum': ['mom'],
+            'returns': ['returns_1d', 'returns_5d'],
+            'volatility': ['volatility_20'],
+            'volume': ['volume_sma_20', 'volume_ratio']
+        }
+        
+        # Seleciona as features
+        if selected_features is None:
+            # Usa todas as features por padrão
+            self.selected_feature_groups = list(self.available_features.keys())
+        else:
+            self.selected_feature_groups = selected_features
+            
+        # Configurações salvas
+        self.config = {
+            'use_ta_lib': self.use_ta_lib,
+            'selected_features': self.selected_feature_groups,
+            'normalize': normalize
+        }
         
     def transform(self, dataframe):
         """
@@ -231,9 +271,109 @@ class FeatureEngineer:
         Args:
             df (pd.DataFrame): DataFrame com features calculadas
         """
+        if not self.normalize:
+            return
+            
         # Colunas para normalizar (excluindo OHLCV)
         cols_to_normalize = [col for col in df.columns if col not in ['open', 'high', 'low', 'close', 'volume']]
         
         if cols_to_normalize:
             # Ajusta o scaler e transforma
             df[cols_to_normalize] = self.scaler.fit_transform(df[cols_to_normalize].values)
+            
+    def save_config(self, path):
+        """
+        Salva a configuração do engenheiro de features.
+        
+        Args:
+            path (str): Caminho para salvar a configuração
+        """
+        import json
+        import pickle
+        
+        # Salva a configuração em JSON
+        with open(f"{path}_config.json", 'w') as f:
+            json.dump(self.config, f)
+            
+        # Salva o scaler em pickle
+        with open(f"{path}_scaler.pkl", 'wb') as f:
+            pickle.dump(self.scaler, f)
+            
+        print(f"Configuração salva em {path}_config.json")
+        print(f"Scaler salvo em {path}_scaler.pkl")
+        
+    @classmethod
+    def load_config(cls, path):
+        """
+        Carrega a configuração do engenheiro de features.
+        
+        Args:
+            path (str): Caminho para carregar a configuração
+            
+        Returns:
+            FeatureEngineer: Nova instância com a configuração carregada
+        """
+        import json
+        import pickle
+        
+        # Carrega a configuração do JSON
+        with open(f"{path}_config.json", 'r') as f:
+            config = json.load(f)
+            
+        # Cria uma nova instância
+        instance = cls(
+            use_ta_lib=config['use_ta_lib'],
+            selected_features=config['selected_features'],
+            normalize=config['normalize']
+        )
+        
+        # Carrega o scaler
+        try:
+            with open(f"{path}_scaler.pkl", 'rb') as f:
+                instance.scaler = pickle.load(f)
+        except FileNotFoundError:
+            print(f"Aviso: Scaler não encontrado em {path}_scaler.pkl")
+            
+        return instance
+        
+    def get_feature_importance(self, model=None, data=None):
+        """
+        Calcula a importância das features.
+        
+        Args:
+            model: Modelo treinado (opcional)
+            data (pd.DataFrame): Dados para calcular importância (opcional)
+            
+        Returns:
+            pd.DataFrame: DataFrame com importância das features
+        """
+        if model is None or data is None:
+            print("Aviso: Modelo ou dados não fornecidos para calcular importância das features")
+            return None
+            
+        try:
+            import shap
+            
+            # Cria um explainer SHAP
+            explainer = shap.Explainer(model)
+            
+            # Calcula valores SHAP
+            shap_values = explainer(data)
+            
+            # Cria DataFrame com importância
+            feature_importance = pd.DataFrame({
+                'feature': self.feature_columns,
+                'importance': np.abs(shap_values.values).mean(axis=0)
+            })
+            
+            # Ordena por importância
+            feature_importance = feature_importance.sort_values('importance', ascending=False)
+            
+            return feature_importance
+            
+        except ImportError:
+            print("Aviso: SHAP não está instalado. Use 'pip install shap' para instalar.")
+            return None
+        except Exception as e:
+            print(f"Erro ao calcular importância das features: {e}")
+            return None
