@@ -1,22 +1,74 @@
+# Core dependencies
 pandas>=1.3.0
 numpy>=1.20.0
-yfinance>=0.1.70
-gymnasium>=0.26.0
-stable-baselines3[extra]>=2.0.0
 matplotlib>=3.4.0
-seaborn>=0.11.0
-optuna>=2.10.0
-shap>=0.40.0; python_version >= '3.8'  # Opcional para análise de features
 scikit-learn>=1.0.0
+scipy>=1.7.0
+
+# RL and ML
+stable-baselines3[extra]>=2.0.0
+gymnasium>=0.26.0
+torch>=1.11.0
+torchvision>=0.12.0
+
+# Financial data
+yfinance>=0.1.70
+
+# Optimization
+optuna>=2.10.0
+
+# Visualization and analysis
+seaborn>=0.11.0
+plotly>=5.3.0
+tensorboard>=2.8.0
+
+# Technical analysis
 ta-lib; platform_system != "Windows"  # TA-Lib (instalar manualmente no Windows)
 ta>=0.10.0  # Fallback para TA-Lib
+
+# Progress bars and utilities
 tqdm>=4.60.0
-pyarrow>=7.0.0  # Para suporte a parquet
-tensorboard>=2.8.0  # Para visualização de treinamento
-joblib>=1.1.0  # Para paralelização
-pytest>=6.0.0  # Para testes
-pytest-cov>=2.12.0  # Para cobertura de testes
-ipywidgets>=7.6.0  # Para widgets em notebooks
-plotly>=5.3.0  # Para visualizações interativas
-statsmodels>=0.13.0  # Para análises estatísticas
-scipy>=1.7.0  # Para cálculos científicos
+joblib>=1.1.0
+
+# Data storage
+pyarrow>=7.0.0
+
+# Statistical analysis
+statsmodels>=0.13.0
+
+# Advanced ML
+xgboost>=1.6.0
+lightgbm>=3.3.0
+
+# Clustering and dimensionality reduction
+umap-learn>=0.5.0
+
+# Time series analysis
+arch>=5.3.0
+
+# Causal inference (optional)
+# causalml>=0.13.0
+
+# Network analysis
+networkx>=2.8.0
+
+# Quantum-inspired algorithms (optional)
+# qiskit>=0.39.0
+
+# Hidden Markov Models (optional)
+# hmmlearn>=0.2.7
+
+# Advanced optimization (optional)
+# cvxpy>=1.2.0
+
+# Model interpretability
+shap>=0.40.0; python_version >= '3.8'
+
+# Development and testing
+pytest>=6.0.0
+pytest-cov>=2.12.0
+black>=22.0.0
+flake8>=4.0.0
+
+# Jupyter support
+ipywidgets>=7.6.0

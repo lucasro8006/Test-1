@@ -1,16 +1,54 @@
-# Sistema de Trading com Reinforcement Learning
+# Sistema Avançado de Trading com Reinforcement Learning
 
-Este projeto implementa um sistema completo de trading baseado em Reinforcement Learning (RL), utilizando as bibliotecas stable-baselines3 e Gymnasium para criar um agente de trading que aprende a tomar decisões de compra e venda em mercados financeiros.
+Este projeto implementa um sistema completo e avançado de trading baseado em Reinforcement Learning (RL), utilizando técnicas de ponta em machine learning, otimização e análise quantitativa para criar agentes de trading sofisticados que aprendem a tomar decisões de investimento em mercados financeiros.
 
-## Visão Geral
+## 🚀 Visão Geral
 
-O sistema foi completamente refatorado para uma arquitetura modular e orientada a objetos, com os seguintes componentes principais:
+O sistema foi completamente refatorado para uma arquitetura modular e orientada a objetos, incorporando as mais recentes inovações em:
 
-1. **Engenharia de Features**: Processamento de dados brutos de preços em indicadores técnicos
-2. **Ambiente de Trading**: Simulação realista de mercado com custos de transação
-3. **Agente de Trading**: Modelo de RL para tomada de decisões
-4. **Avaliação de Desempenho**: Métricas financeiras e visualizações
-5. **Otimização de Hiperparâmetros**: Busca eficiente por parâmetros ótimos
+### Componentes Principais
+1. **Engenharia de Features Avançada**: Processamento de dados com indicadores técnicos e features alternativas
+2. **Ambiente de Trading Realista**: Simulação completa com custos de transação, slippage e impacto de mercado
+3. **Ensemble de Agentes**: Combinação de múltiplos algoritmos de RL (PPO, A2C, SAC, TD3)
+4. **Estratégias Sofisticadas**: Portfolio optimization, multi-timeframe, factor investing
+5. **Gestão de Risco Avançada**: VaR, CVaR, stress testing, Kelly Criterion
+6. **Inovações Tecnológicas**: GANs, inferência causal, otimização quantum-inspired
+
+### Funcionalidades Avançadas Implementadas
+
+#### 🤖 **Ensemble de Modelos de RL**
+- **Transformer Policy**: Redes neurais baseadas em Transformer para capturar dependências temporais
+- **LSTM Policy**: Memória de longo prazo para padrões sequenciais
+- **Multi-Algorithm Ensemble**: Combinação ponderada de PPO, A2C, SAC e TD3
+- **Dynamic Weight Adjustment**: Ajuste automático de pesos baseado na performance
+
+#### 📊 **Estratégias Avançadas**
+- **Portfolio Optimization**: Markowitz, Risk Parity, Black-Litterman, Hierarchical Risk Parity
+- **Multi-Timeframe Trading**: Sinais combinados de múltiplos horizontes temporais
+- **Factor Investing**: Momentum, mean reversion, volatility factors
+- **Market Making**: Estratégias de criação de mercado com inventory management
+- **Dynamic Hedging**: Hedging automático com cálculo de ratios ótimos
+
+#### 🧠 **Técnicas de RL Avançadas**
+- **Curiosity-Driven Learning**: Intrinsic Curiosity Module (ICM) para exploração
+- **Imitation Learning**: Aprendizado por imitação de traders experientes
+- **Multi-Agent RL**: Simulação de múltiplos participantes do mercado
+- **Distributional RL**: Modelagem completa da distribuição de retornos (C51/Rainbow)
+- **Offline RL**: Conservative Q-Learning para aprendizado com dados históricos
+
+#### ⚠️ **Gestão de Risco Sofisticada**
+- **VaR Dinâmico**: Value at Risk paramétrico, histórico e Monte Carlo
+- **Stress Testing**: Cenários de crash, choque de juros, crise de liquidez
+- **Kelly Criterion**: Position sizing ótimo baseado em probabilidades
+- **Anomaly Detection**: Detecção em tempo real de anomalias de preço e volume
+- **Risk Budgeting**: Alocação de risco entre estratégias
+
+#### 🔬 **Inovações Tecnológicas**
+- **Financial GANs**: Geração de cenários sintéticos de mercado
+- **Causal Inference**: Descoberta de relações causais usando Granger, IV, PC algorithm
+- **Quantum-Inspired Optimization**: Algoritmos inspirados em computação quântica
+- **Regime Detection**: Identificação automática de regimes de mercado
+- **Network Analysis**: Análise de correlações e contágio entre ativos
 
 ## Estrutura do Projeto
 
